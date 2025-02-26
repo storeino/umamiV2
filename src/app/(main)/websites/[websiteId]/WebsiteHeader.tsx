@@ -60,11 +60,13 @@ export function WebsiteHeader({
 
   return (
     <div className={styles.header}>
-      <div className={styles.title}>
-        <Favicon domain={domain} />
-        <Text>{name}</Text>
-        <ActiveUsers websiteId={websiteId} />
-      </div>
+      {showLinks && (
+        <div className={styles.title}>
+          <Favicon domain={domain} />
+          <Text>{name}</Text>
+          <ActiveUsers websiteId={websiteId} />
+        </div>
+      )}
       <div className={styles.actions}>
         {showLinks && (
           <div className={styles.links}>

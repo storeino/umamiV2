@@ -25,9 +25,9 @@ export default function WebsiteDetailsPage({ websiteId }: { websiteId: string })
 
   return (
     <>
-      <WebsiteHeader websiteId={websiteId} showLinks={showLinks} />
+      {showLinks && <WebsiteHeader websiteId={websiteId} showLinks={showLinks} />}
       <FilterTags websiteId={websiteId} params={params} />
-      <WebsiteMetricsBar websiteId={websiteId} showFilter={true} showChange={true} sticky={true} />
+      <WebsiteMetricsBar websiteId={websiteId} showFilter={true} showChange={true} sticky={false} />
       <WebsiteChart websiteId={websiteId} />
       {!view && <WebsiteTableView websiteId={websiteId} />}
       {view && <WebsiteExpandedView websiteId={websiteId} />}
