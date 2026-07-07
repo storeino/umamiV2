@@ -24,6 +24,7 @@ import { PageBody } from '@/components/common/PageBody';
 import { useShare } from '@/components/hooks';
 import { ENTITY_TYPE } from '@/lib/constants';
 import { getShareTheme } from '@/lib/share';
+import { ShareEventsSection } from './ShareEventsSection';
 import { ShareFooter } from './ShareFooter';
 
 const PAGE_COMPONENTS: Record<string, React.ComponentType<{ websiteId: string }>> = {
@@ -106,12 +107,14 @@ export function SharePage() {
   }
 
   const PageComponent = PAGE_COMPONENTS[pageKey] || WebsitePage;
+  const isOverview = pageKey === '' || pageKey === 'overview';
 
   return (
     <PageBody gap>
       <WebsiteProvider websiteId={websiteId}>
         <Column>
           <PageComponent websiteId={websiteId} />
+          {isOverview && <ShareEventsSection websiteId={websiteId} />}
         </Column>
       </WebsiteProvider>
     </PageBody>
