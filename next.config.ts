@@ -49,7 +49,7 @@ const contentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   connect-src ${connectSrc};
   frame-src 'self' http: https:;
-  frame-ancestors 'self' ${frameAncestors};
+  frame-ancestors 'self' https://business.storeino.com https://admin.storeino.world ${frameAncestors};
 `;
 
 const defaultHeaders = [
