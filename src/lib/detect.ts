@@ -110,26 +110,33 @@ export async function getLocation(ip: string = '', headers: Headers, skipHeaders
   }
 
   // Database lookup
-  if (!globalThis[MAXMIND]) {
-    const dir = path.join(process.cwd(), 'geo');
+  try {
+    if (!globalThis[MAXMIND]) {
+      const dir = path.join(process.cwd(), 'geo');
 
-    globalThis[MAXMIND] = await maxmind.open(
-      process.env.GEOLITE_DB_PATH || path.resolve(dir, 'GeoLite2-City.mmdb'),
-    );
-  }
+      globalThis[MAXMIND] = await maxmind.open(
+        process.env.GEOLITE_DB_PATH || path.resolve(dir, 'GeoLite2-City.mmdb'),
+      );
+    }
 
-  const result = globalThis[MAXMIND]?.get(cleanIp);
+    const result = globalThis[MAXMIND]?.get(cleanIp);
 
-  if (result) {
-    const country = result.country?.iso_code ?? result?.registered_country?.iso_code;
-    const region = result.subdivisions?.[0]?.iso_code;
-    const city = result.city?.names?.en;
+    if (result) {
+      const country = result.country?.iso_code ?? result?.registered_country?.iso_code;
+      const region = result.subdivisions?.[0]?.iso_code;
+      const city = result.city?.names?.en;
 
-    return {
-      country,
-      region: getRegionCode(country, region),
-      city,
-    };
+      return {
+        country,
+        region: getRegionCode(country, region),
+        city,
+      };
+    }
+  } catch (e) {
+    // Geo lookup must never block event ingestion — log and continue without location
+    // eslint-disable-next-line no-console
+    console.log('Geo lookup failed:', e instanceof Error ? e.message : e);
+    return null;
   }
 }
 
